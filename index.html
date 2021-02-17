@@ -84,7 +84,24 @@
       // The main difference from fetchOne() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
-        // TODO
+        document.getElementById('recordForm').style.display = 'none';
+        document.getElementById('recordIDcontainer').style.display = 'none';
+        const output = document.getElementById('output');
+
+        fetch('http://localhost:3000/posts')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.status + ' ' + response.statusText);
+            }
+            return response;
+          })
+          .then(response => response.json())
+          .then(data => {
+            output.innerHTML = JSON.stringify(data);
+          })
+          .catch(error => {
+            output.innerHTML = error;
+          });
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -92,23 +109,102 @@
       // The main difference from fetchAll() will be the URL you request from; check
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
-        // TODO
+        document.getElementById('recordForm').style.display = 'none';
+        document.getElementById('recordIDcontainer').style.display = 'none';
+        const output = document.getElementById('output');
+        const id = window.prompt('Enter the record id');
+
+        fetch('http://localhost:3000/posts/' + id)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.status + ' ' + response.statusText);
+            }
+            return response;
+          })
+          .then(response => response.json())
+          .then(data => {
+            output.innerHTML = JSON.stringify(data);
+          })
+          .catch(error => {
+            output.innerHTML = error;
+          });
       }
 
       // This function should use fetch to create one entry in the given endpoint.
       // From the 4 CRUD actions, this is the CREATE action, and uses the POST http method.
       // The main difference from updateRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function createRecord() {
-        // TODO
+      function createRecord(type) {
+        if(type === 'show') {
+          document.getElementById('recordForm').style.display = 'block';
+          document.getElementById('recordIDcontainer').style.display = 'none';
+        }
+        else {
+          const output = document.getElementById('output');
+          const author = document.getElementById('author').value;
+          const title = document.getElementById('title').value;
+          const body = {
+            'author': author,
+            'title': title,
+          };
+
+          fetch('http://localhost:3000/posts', {
+            method: 'post',
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify(body)
+          })
+          .then(response => response.json())
+          .then(data => {
+            output.innerHTML = JSON.stringify(data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+        }
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.
       // The main difference from createRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function updateRecord() {
-        // TODO
+      function updateRecord(type) {
+        if(type === 'show') {
+          document.getElementById('recordForm').style.display = 'block';
+          document.getElementById('recordIDcontainer').style.display = 'block';
+        }
+        else {
+          const output = document.getElementById('output');
+          const author = document.getElementById('author').value;
+          const title = document.getElementById('title').value;
+          const id = document.getElementById('recordID').value;
+          const body = {
+            'author': author,
+            'title': title,
+          };
+
+          fetch('http://localhost:3000/posts/' + id, {
+            method: 'put',
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify(body)
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.status + ' ' + response.statusText);
+            }
+            return response;
+          })
+          .then(response => response.json())
+          .then(data => {
+            output.innerHTML = JSON.stringify(data);
+          })
+          .catch(error => {
+            output.innerHTML = error;
+          });
+        }
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -117,7 +213,27 @@
       // request; check the writeup to view the URL pattern for get one and delete. THERE IS NO 
       // delete all, only delete one.
       function deleteRecord() {
-        // TODO
+        document.getElementById('recordForm').style.display = 'none';
+        document.getElementById('recordIDcontainer').style.display = 'none';
+        const output = document.getElementById('output');
+        const id = window.prompt('Enter the record id');
+
+        fetch('http://localhost:3000/posts/' + id, {
+          method: 'delete',
+        }) 
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(response.status + ' ' + response.statusText);
+          }
+          return response;
+        })
+        .then(response => response.json())
+        .then(data => {
+          output.innerHTML = JSON.stringify(data);
+        })
+        .catch(error => {
+          output.innerHTML = error;
+        });
       }
 
       window.addEventListener('DOMContentLoaded', () => {
